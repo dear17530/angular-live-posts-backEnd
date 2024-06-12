@@ -5,6 +5,7 @@
         public string Title { get; set; } = null!;
         public string Description { get; set; } = null!;
         public string ImagePath { get; set; } = null!;
-        public string? Author { get; set; }
+        public string Author { get; set; }
+        public DateTime DatetimeCreated { get; set; }
     }
 }

@@ -21,12 +21,12 @@ namespace Post.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<PostResDto> Get([FromQuery]PostResParamater value)
+        public IActionResult Get([FromQuery] PostResParamater value) // 使用 IActionResult 示範
         {
             var result = from a in _postContext.PostLists
                          select a;
 
-            if(!string.IsNullOrEmpty(value.Title))
+            if (!string.IsNullOrEmpty(value.Title))
             {
                 result = result.Where(x => x.Title.IndexOf(value.Title) > -1);
             }
@@ -36,17 +36,44 @@ namespace Post.Controllers
                 result = result.Where(x => x.DatetimeCreated.Date == value.DatetimeCreated);
             }
 
-            return _mapper.Map<IEnumerable<PostResDto>>(result);
+            if (result == null || result.Count() == 0)
+            {
+                return NotFound("找不到資源");
+            }
+
+            return Ok(_mapper.Map<IEnumerable<PostResDto>>(result));
         }
 
         [HttpGet("{id}")]
-        public PostResDto Get(Guid id)
+        public ActionResult<PostResDto> Get(Guid id)  // 使用 ActionResult 示範, return 可以省略 Ok
         {
             var result = (from a in _postContext.PostLists
                          where a.Id == id
                          select a).SingleOrDefault();
 
+            if (result == null)
+            {
+                return NotFound("找不到資源");
+            }
+
             return _mapper.Map<PostResDto>(result);
+        }
+
+        [HttpPost]
+        public void Post([FromBody] PostList value)
+        {
+            PostList insert = new PostList 
+            {
+                Title = value.Title,
+                Description = value.Description,
+                Author = value.Author,
+                ImagePath = value.ImagePath,
+                DatetimeCreated = DateTime.Now,
+                NumberOfLikes = 0,
+            };
+
+            _postContext.PostLists.Add(insert);
+            _postContext.SaveChanges();
         }
     }
 }
