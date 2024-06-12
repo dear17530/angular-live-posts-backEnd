@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Post.Dtos;
 using Post.Models;
 using Post.Parameters;
@@ -11,10 +12,12 @@ namespace Post.Controllers
     public class PostController : ControllerBase
     {
         private readonly PostContext _postContext;
+        private readonly IMapper _mapper;
 
-        public PostController(PostContext postContext)
+        public PostController(PostContext postContext, IMapper mapper)
         {
             _postContext = postContext;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -33,7 +36,7 @@ namespace Post.Controllers
                 result = result.Where(x => x.DatetimeCreated.Date == value.DatetimeCreated);
             }
 
-            return result.ToList().Select(a=>ItemToDto(a));
+            return _mapper.Map<IEnumerable<PostResDto>>(result);
         }
 
         [HttpGet("{id}")]
@@ -41,22 +44,9 @@ namespace Post.Controllers
         {
             var result = (from a in _postContext.PostLists
                          where a.Id == id
-                         select ItemToDto(a)).SingleOrDefault();
-            return result;
-        }
+                         select a).SingleOrDefault();
 
-        private static PostResDto ItemToDto(PostList postList)
-        {
-            return new PostResDto
-            {
-                Title = postList.Title,
-                Description = postList.Description,
-                ImagePath = postList.ImagePath,
-                Author = postList.Author,
-                DatetimeCreated = postList.DatetimeCreated,
-                NumberOfLikes = postList.NumberOfLikes,
-                Id = postList.Id,
-            };
+            return _mapper.Map<PostResDto>(result);
         }
     }
 }

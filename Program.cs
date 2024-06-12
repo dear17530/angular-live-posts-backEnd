@@ -13,6 +13,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PostContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("PostDatabase")));
 
+// AutoMapper
+builder.Services.AddAutoMapper(typeof(Program));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
