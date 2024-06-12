@@ -60,7 +60,7 @@ namespace Post.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] PostList value)
+        public void Post([FromBody] PostReqDto value)
         {
             PostList insert = new PostList 
             {
@@ -69,7 +69,6 @@ namespace Post.Controllers
                 Author = value.Author,
                 ImagePath = value.ImagePath,
                 DatetimeCreated = DateTime.Now,
-                NumberOfLikes = 0,
             };
 
             _postContext.PostLists.Add(insert);
