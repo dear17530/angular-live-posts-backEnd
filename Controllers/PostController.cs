@@ -62,10 +62,12 @@ namespace Post.Controllers
         [HttpPost]
         public void Post([FromBody] PostReqDto value)
         {
-            var map = _mapper.Map<PostList>(value);
-            map.DatetimeCreated = DateTime.Now;
+            PostList insert = new PostList
+            {
+                DatetimeCreated = DateTime.Now,
+            };
 
-            _postContext.PostLists.Add(map);
+            _postContext.PostLists.Add(insert).CurrentValues.SetValues(value);
             _postContext.SaveChanges();
         }
     }
