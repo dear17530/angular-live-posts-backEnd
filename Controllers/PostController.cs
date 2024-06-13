@@ -48,8 +48,8 @@ namespace Post.Controllers
         public ActionResult<PostResDto> Get(Guid id)  // 使用 ActionResult 示範, return 可以省略 Ok
         {
             var result = (from a in _postContext.PostLists
-                         where a.Id == id
-                         select a).SingleOrDefault();
+                          where a.Id == id
+                          select a).SingleOrDefault();
 
             if (result == null)
             {
@@ -60,7 +60,7 @@ namespace Post.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] PostReqDto value)
+        public IActionResult Post([FromBody] PostReqDto value)
         {
             PostList insert = new PostList
             {
@@ -69,6 +69,8 @@ namespace Post.Controllers
 
             _postContext.PostLists.Add(insert).CurrentValues.SetValues(value);
             _postContext.SaveChanges();
+
+            return CreatedAtAction(nameof(Get), new { Id = insert.Id }, insert);
         }
     }
 }
