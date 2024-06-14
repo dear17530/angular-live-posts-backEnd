@@ -97,7 +97,7 @@ namespace Post.Controllers
         }
 
         [HttpDelete("{id}")]
-        public void Delete(Guid id)
+        public IActionResult Delete(Guid id)
         {
             //var child = from a in _postContext.childLists
             //            where a.ListId == id
@@ -110,11 +110,15 @@ namespace Post.Controllers
                           where a.Id == id
                           select a).SingleOrDefault();
 
-            if (delete != null)
+            if (delete == null)
             {
-                _postContext.PostLists.Remove(delete);
-                _postContext.SaveChanges();
+                return NotFound();
             }
+
+            _postContext.PostLists.Remove(delete);
+            _postContext.SaveChanges();
+
+            return NoContent();
         }
 
         [HttpDelete]
