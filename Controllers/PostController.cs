@@ -117,13 +117,11 @@ namespace Post.Controllers
             }
         }
 
-        [HttpDelete("{ids}")]
-        public void Delete(string ids)
+        [HttpDelete]
+        public void Delete([FromBody] List<Guid> ids)
         {
-            List<Guid> deleteList = JsonSerializer.Deserialize<List<Guid>>(ids);
-
             var delete = from a in _postContext.PostLists
-                         where deleteList.Contains(a.Id)
+                         where ids.Contains(a.Id)
                          select a;
 
             if (delete != null)
