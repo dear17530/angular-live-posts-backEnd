@@ -77,9 +77,17 @@ namespace Post.Controllers
         [HttpPut("{id}")]
         public void Put(Guid id, [FromBody] PostList value)
         {
-            //_postContext.Entry(value).State = EntityState.Modified;
-            _postContext.PostLists.Update(value);
-            _postContext.SaveChanges();
+            var update = _postContext.PostLists.Find(id);
+
+            if(update != null) 
+            {
+                update.Author = value.Author;
+                update.ImagePath = value.ImagePath;
+                update.Title = value.Title;
+                update.Description = value.Description;
+
+                _postContext.SaveChanges();
+            }
         }
     }
 }
