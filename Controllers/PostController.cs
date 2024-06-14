@@ -83,11 +83,8 @@ namespace Post.Controllers
 
             if(update != null) 
             {
-                update.Title = value.Title;
-                update.Description = value.Description;
-                update.ImagePath = value.ImagePath;
-
-                _postContext.SaveChanges();
+               _mapper.Map(value, update);
+               _postContext.SaveChanges();
             }
         }
     }

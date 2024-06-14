@@ -10,6 +10,7 @@ namespace Post.Profiles
         {
             CreateMap<PostList, PostResDto>();
             CreateMap<PostReqDto, PostList>();
+            CreateMap<PutReqDto, PostList>();
         }
     }
 }
