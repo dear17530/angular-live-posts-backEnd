@@ -75,18 +75,17 @@ namespace Post.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] PostList value)
+        public void Put(Guid id, [FromBody] PutReqDto value)
         {
             var update = (from a in _postContext.PostLists
-                          where a.Title == value.Title
+                          where a.Id == id
                           select a).SingleOrDefault();
 
             if(update != null) 
             {
-                update.Author = value.Author;
-                update.ImagePath = value.ImagePath;
                 update.Title = value.Title;
                 update.Description = value.Description;
+                update.ImagePath = value.ImagePath;
 
                 _postContext.SaveChanges();
             }
