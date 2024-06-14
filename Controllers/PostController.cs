@@ -76,15 +76,42 @@ namespace Post.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(Guid id, [FromBody] PutReqDto value)
+        public IActionResult Put(Guid id, [FromBody] PutReqDto value)
         {
             var update = (from a in _postContext.PostLists
                           where a.Id == id
                           select a).SingleOrDefault();
 
-            if(update != null) 
+            if (update != null)
             {
                 _postContext.PostLists.Update(update).CurrentValues.SetValues(value);
+                _postContext.SaveChanges();
+            }
+            else
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public void Delete(Guid id)
+        {
+            //var child = from a in _postContext.childLists
+            //            where a.ListId == id
+            //            select a;
+
+            //_postContext.childLists.RemoveRange(child);
+            //_postContext.SaveChanges();
+
+            var delete = (from a in _postContext.PostLists
+                          where a.Id == id
+                          select a).SingleOrDefault();
+
+            if (delete != null)
+            {
+                _postContext.PostLists.Remove(delete);
                 _postContext.SaveChanges();
             }
         }
