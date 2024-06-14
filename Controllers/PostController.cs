@@ -5,6 +5,7 @@ using Post.Dtos;
 using Post.Models;
 using Post.Parameters;
 using System;
+using System.Collections.Generic;
 
 namespace Post.Controllers
 {
@@ -83,8 +84,8 @@ namespace Post.Controllers
 
             if(update != null) 
             {
-               _mapper.Map(value, update);
-               _postContext.SaveChanges();
+                _postContext.PostLists.Update(update).CurrentValues.SetValues(value);
+                _postContext.SaveChanges();
             }
         }
     }
