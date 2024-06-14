@@ -6,6 +6,7 @@ using Post.Models;
 using Post.Parameters;
 using System;
 using System.Collections.Generic;
+using System.Text.Json;
 
 namespace Post.Controllers
 {
@@ -112,6 +113,22 @@ namespace Post.Controllers
             if (delete != null)
             {
                 _postContext.PostLists.Remove(delete);
+                _postContext.SaveChanges();
+            }
+        }
+
+        [HttpDelete("{ids}")]
+        public void Delete(string ids)
+        {
+            List<Guid> deleteList = JsonSerializer.Deserialize<List<Guid>>(ids);
+
+            var delete = from a in _postContext.PostLists
+                         where deleteList.Contains(a.Id)
+                         select a;
+
+            if (delete != null)
+            {
+                _postContext.PostLists.RemoveRange(delete);
                 _postContext.SaveChanges();
             }
         }
