@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Post.Dtos;
 using Post.Models;
 using Post.Parameters;
@@ -71,6 +72,14 @@ namespace Post.Controllers
             _postContext.SaveChanges();
 
             return CreatedAtAction(nameof(Get), new { Id = insert.Id }, insert);
+        }
+
+        [HttpPut("{id}")]
+        public void Put(Guid id, [FromBody] PostList value)
+        {
+            //_postContext.Entry(value).State = EntityState.Modified;
+            _postContext.PostLists.Update(value);
+            _postContext.SaveChanges();
         }
     }
 }
