@@ -77,7 +77,9 @@ namespace Post.Controllers
         [HttpPut("{id}")]
         public void Put(Guid id, [FromBody] PostList value)
         {
-            var update = _postContext.PostLists.Find(id);
+            var update = (from a in _postContext.PostLists
+                          where a.Title == value.Title
+                          select a).SingleOrDefault();
 
             if(update != null) 
             {
