@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Post.ValidationAttributes
 {
-    public class PostTitleAttribute: ValidationAttribute
+    public class PostTitleAttribute : ValidationAttribute
     {
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
@@ -17,7 +17,7 @@ namespace Post.ValidationAttributes
                             where a.Title == title
                             select a;
 
-            // 確認傳入的 Dto 是否回 putReqDto
+            // 確認傳入的 Dto 是否是 PutReqDto
             var dto = validationContext.ObjectInstance;
 
             if(dto.GetType() == typeof(PutReqDto))

@@ -2,6 +2,7 @@
 
 namespace Post.Dtos
 {
+    [StartTimeEndTimeAttribute]
     public class PostReqDto
     {
         [PostTitleAttribute] // 也可寫成 [PostTitle]

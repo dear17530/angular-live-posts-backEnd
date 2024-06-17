@@ -2,6 +2,7 @@
 
 namespace Post.Dtos
 {
+    [StartTimeEndTimeAttribute]
     public class PutReqDto
     {
         [PostTitleAttribute] // 也可寫成 [PostTitle]
@@ -10,7 +11,6 @@ namespace Post.Dtos
         public string ImagePath { get; set; }
         public Guid Id { get; set; }
         public DateTime StartTime { get; set; }
-
         public DateTime EndTime { get; set; }
     }
 }
