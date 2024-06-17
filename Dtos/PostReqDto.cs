@@ -2,6 +2,7 @@
 
 namespace Post.Dtos
 {
+    [PassValueAttribute(PassValue = "123")]
     [StartTimeEndTimeAttribute]
     public class PostReqDto
     {
