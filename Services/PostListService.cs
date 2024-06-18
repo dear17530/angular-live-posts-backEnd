@@ -5,7 +5,7 @@ using Post.Parameters;
 
 namespace Post.Services
 {
-    public class PostListService
+    public class PostListService : IPostListService
     {
         private readonly PostContext _postContext;
         private readonly IMapper _mapper;
@@ -68,7 +68,7 @@ namespace Post.Services
             return update;
         }
 
-        public bool DeletePost(Guid id)
+        public int DeletePost(Guid id)
         {
             var delete = (from a in _postContext.PostLists
                           where a.Id == id
@@ -77,15 +77,13 @@ namespace Post.Services
             if (delete != null)
             {
                 _postContext.PostLists.Remove(delete);
-                _postContext.SaveChanges();
 
-                return true;
             }
 
-            return false;
+            return _postContext.SaveChanges(); // 會回傳修改的數量
         }
 
-        public bool DeletePostByIds(List<Guid> ids)
+        public int DeletePostByIds(List<Guid> ids)
         {
             var delete = from a in _postContext.PostLists
                          where ids.Contains(a.Id)
@@ -94,12 +92,9 @@ namespace Post.Services
             if (delete != null)
             {
                 _postContext.PostLists.RemoveRange(delete);
-                _postContext.SaveChanges();
-
-                return true;
             }
 
-            return false;
+            return _postContext.SaveChanges();
         }
     }
 }

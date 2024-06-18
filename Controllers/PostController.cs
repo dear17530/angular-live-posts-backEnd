@@ -15,9 +15,9 @@ namespace Post.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly PostListService _postListService;
+        private readonly IPostListService _postListService;
 
-        public PostController( PostListService postListService)
+        public PostController(IPostListService postListService)
         {
             _postListService = postListService;
         }
@@ -74,7 +74,7 @@ namespace Post.Controllers
         {
             var result = _postListService.DeletePost(id);
 
-            if (!result)
+            if (result == 0)
             {
                 return NotFound();
             }
@@ -87,7 +87,7 @@ namespace Post.Controllers
         {
             var result = _postListService.DeletePostByIds(ids);
 
-            if (!result)
+            if (result == 0)
             {
                 return NotFound();
             }

@@ -17,7 +17,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("PostDatabase")))
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
 
-builder.Services.AddScoped<PostListService>();
+// IOC
+builder.Services.AddScoped<IPostListService, PostListService>();
 
 var app = builder.Build();
 
