@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Post.Models;
+using Post.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,8 @@ options.UseSqlServer(builder.Configuration.GetConnectionString("PostDatabase")))
 
 // AutoMapper
 builder.Services.AddAutoMapper(typeof(Program));
+
+builder.Services.AddScoped<PostListService>();
 
 var app = builder.Build();
 
