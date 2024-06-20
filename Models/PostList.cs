@@ -22,4 +22,6 @@ public partial class PostList
     public DateTime StartTime { get; set; }
 
     public DateTime EndTime { get; set; }
+
+    public virtual ICollection<UploadFile> UploadFiles { get; set; } = new List<UploadFile>();
 }

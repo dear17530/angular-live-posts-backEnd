@@ -17,6 +17,8 @@ public partial class PostContext : DbContext
 
     public virtual DbSet<PostList> PostLists { get; set; }
 
+    public virtual DbSet<UploadFile> UploadFiles { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<PostList>(entity =>
@@ -41,6 +43,18 @@ public partial class PostContext : DbContext
             entity.Property(e => e.Title)
                 .IsRequired()
                 .HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<UploadFile>(entity =>
+        {
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.Name).IsRequired();
+            entity.Property(e => e.Src).IsRequired();
+
+            entity.HasOne(d => d.Post).WithMany(p => p.UploadFiles)
+                .HasForeignKey(d => d.PostId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_UploadFiles_UploadFiles");
         });
 
         OnModelCreatingPartial(modelBuilder);
