@@ -50,11 +50,6 @@ public partial class PostContext : DbContext
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Src).IsRequired();
-
-            entity.HasOne(d => d.Post).WithMany(p => p.UploadFiles)
-                .HasForeignKey(d => d.PostId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_UploadFiles_UploadFiles");
         });
 
         OnModelCreatingPartial(modelBuilder);

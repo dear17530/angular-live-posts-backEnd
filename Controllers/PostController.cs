@@ -23,9 +23,9 @@ namespace Post.Controllers
         }
 
         [HttpGet]
-        public IActionResult Get([FromQuery] PostResParamater value)
+        public async Task<IActionResult> Get([FromQuery] PostResParamater value)
         {
-            var result = _postListService.QueryPost(value);
+            var result = await _postListService.QueryPost(value);
 
             if (result == null || result.Count() == 0)
             {
@@ -36,9 +36,9 @@ namespace Post.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetByIds([FromRoute] Guid id) 
+        public async Task<IActionResult> GetByIds([FromRoute] Guid id) 
         {
-            var result = _postListService.QueryPostById(id);
+            var result = await _postListService.QueryPostById(id);
 
             if (result == null)
             {
@@ -49,17 +49,17 @@ namespace Post.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] PostReqDto value)
+        public async Task<IActionResult> Post([FromBody] PostReqDto value)
         {
-            var result = _postListService.CreatePost(value);
+            var result = await _postListService.CreatePost(value);
 
             return CreatedAtAction(nameof(Get), new { Id = result.Id }, result);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(Guid id, [FromBody] PutReqDto value)
+        public async Task<IActionResult> Put(Guid id, [FromBody] PutReqDto value)
         {
-            var result = _postListService.UpdatePost(id, value);
+            var result = await _postListService.UpdatePost(id, value);
 
             if (result == null)
             {
@@ -70,9 +70,9 @@ namespace Post.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete([FromRoute] Guid id)
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
-            var result = _postListService.DeletePost(id);
+            var result = await _postListService.DeletePost(id);
 
             if (result == 0)
             {
@@ -83,9 +83,9 @@ namespace Post.Controllers
         }
 
         [HttpDelete]
-        public IActionResult DeleteByIds([FromBody] List<Guid> ids)
+        public async Task<IActionResult> DeleteByIds([FromBody] List<Guid> ids)
         {
-            var result = _postListService.DeletePostByIds(ids);
+            var result = await _postListService.DeletePostByIds(ids);
 
             if (result == 0)
             {

@@ -12,6 +12,4 @@ public partial class UploadFile
     public Guid Id { get; set; }
 
     public Guid PostId { get; set; }
-
-    public virtual PostList Post { get; set; }
 }

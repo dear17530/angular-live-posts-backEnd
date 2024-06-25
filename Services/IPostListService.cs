@@ -7,11 +7,11 @@ namespace Post.Services
 {
     public interface IPostListService
     {
-        public IEnumerable<PostResDto> QueryPost(PostResParamater value);
-        public PostResDto QueryPostById(Guid id);
-        public PostList CreatePost(PostReqDto value);
-        public PostList UpdatePost(Guid id, PutReqDto value);
-        public int DeletePost(Guid id);
-        public int DeletePostByIds(List<Guid> ids);
+        public Task<IEnumerable<PostResDto>> QueryPost(PostResParamater value);
+        public Task<PostResDto> QueryPostById(Guid id);
+        public Task<PostList> CreatePost(PostReqDto value);
+        public Task<PostList> UpdatePost(Guid id, PutReqDto value);
+        public Task<int> DeletePost(Guid id);
+        public Task<int> DeletePostByIds(List<Guid> ids);
     }
 }

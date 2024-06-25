@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Post.Dtos;
 using Post.Models;
 using Post.Parameters;
@@ -15,7 +16,7 @@ namespace Post.Services
             _mapper = mapper;
         }
 
-        public IEnumerable<PostResDto> QueryPost(PostResParamater value)
+        public async Task<IEnumerable<PostResDto>> QueryPost(PostResParamater value)
         {
             var result = from a in _postContext.PostLists
                          select a;
@@ -30,49 +31,51 @@ namespace Post.Services
                 result = result.Where(x => x.DatetimeCreated.Date == value.DatetimeCreated);
             }
 
-            return _mapper.Map<IEnumerable<PostResDto>>(result);
+            var resultList = await result.ToListAsync();
+
+            return _mapper.Map<IEnumerable<PostResDto>>(resultList);
         }
 
-        public PostResDto QueryPostById(Guid id)
+        public async Task<PostResDto> QueryPostById(Guid id)
         {
-            var result = (from a in _postContext.PostLists
+            var result =await (from a in _postContext.PostLists
                           where a.Id == id
-                          select a).SingleOrDefault();
+                          select a).SingleOrDefaultAsync();
 
             return _mapper.Map<PostResDto>(result);
         }
 
-        public PostList CreatePost(PostReqDto value)
+        public async Task<PostList> CreatePost(PostReqDto value)
         {
             var map = _mapper.Map<PostList>(value);
             map.DatetimeCreated = DateTime.Now;
 
             _postContext.PostLists.Add(map);
-            _postContext.SaveChanges();
+            await _postContext.SaveChangesAsync();
 
             return map;
         }
 
-        public PostList UpdatePost(Guid id, PutReqDto value)
+        public async Task<PostList> UpdatePost(Guid id, PutReqDto value)
         {
-            var update = (from a in _postContext.PostLists
+            var update = await (from a in _postContext.PostLists
                           where a.Id == id
-                          select a).SingleOrDefault();
+                          select a).SingleOrDefaultAsync();
 
             if (update != null)
             {
                 _mapper.Map(value, update);
-                _postContext.SaveChanges();
+                await _postContext.SaveChangesAsync();
             }
 
             return update;
         }
 
-        public int DeletePost(Guid id)
+        public async Task<int> DeletePost(Guid id)
         {
-            var delete = (from a in _postContext.PostLists
+            var delete = await(from a in _postContext.PostLists
                           where a.Id == id
-                          select a).SingleOrDefault();
+                          select a).SingleOrDefaultAsync();
 
             if (delete != null)
             {
@@ -80,10 +83,10 @@ namespace Post.Services
 
             }
 
-            return _postContext.SaveChanges(); // 會回傳修改的數量
+            return await _postContext.SaveChangesAsync(); // 會回傳修改的數量
         }
 
-        public int DeletePostByIds(List<Guid> ids)
+        public async Task<int> DeletePostByIds(List<Guid> ids)
         {
             var delete = from a in _postContext.PostLists
                          where ids.Contains(a.Id)
@@ -94,7 +97,7 @@ namespace Post.Services
                 _postContext.PostLists.RemoveRange(delete);
             }
 
-            return _postContext.SaveChanges();
+            return await _postContext.SaveChangesAsync();
         }
     }
 }
