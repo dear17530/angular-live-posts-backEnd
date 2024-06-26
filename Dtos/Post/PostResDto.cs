@@ -1,11 +1,11 @@
 ﻿using Post.ValidationAttributes;
 
-namespace Post.Dtos
+namespace Post.Dtos.Post
 {
-    [StartTimeEndTimeAttribute]
+    [StartTimeEndTime]
     public class PostResDto
     {
-        [PostTitleAttribute]
+        [PostTitle]
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImagePath { get; set; }

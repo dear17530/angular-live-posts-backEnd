@@ -15,12 +15,23 @@ public partial class PostContext : DbContext
     {
     }
 
+    public virtual DbSet<Employee> Employees { get; set; }
+
     public virtual DbSet<PostList> PostLists { get; set; }
 
     public virtual DbSet<UploadFile> UploadFiles { get; set; }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<Employee>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.Account).IsRequired();
+            entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
+            entity.Property(e => e.Name).IsRequired();
+            entity.Property(e => e.Password).IsRequired();
+        });
+
         modelBuilder.Entity<PostList>(entity =>
         {
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");

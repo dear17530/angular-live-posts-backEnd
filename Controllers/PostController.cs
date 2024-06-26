@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Post.Dtos;
+using Post.Dtos.Post;
 using Post.Models;
 using Post.Parameters;
 using Post.Services;
@@ -13,6 +14,7 @@ namespace Post.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    //[Authorize] 整個 controller 加上權限
     public class PostController : ControllerBase
     {
         private readonly IPostListService _postListService;
@@ -23,6 +25,7 @@ namespace Post.Controllers
         }
 
         [HttpGet]
+        //[Authorize] 單支 api 加上權限
         public async Task<IActionResult> Get([FromQuery] PostResParamater value)
         {
             var result = await _postListService.QueryPost(value);

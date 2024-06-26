@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Post.Dtos;
+using Post.Dtos.Post;
 using Post.Models;
 
 namespace Post.Profiles

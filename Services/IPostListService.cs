@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Post.Dtos;
+using Post.Dtos.Post;
 using Post.Models;
 using Post.Parameters;
 

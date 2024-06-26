@@ -1,4 +1,4 @@
-﻿using Post.Dtos;
+﻿using Post.Dtos.Post;
 using Post.Models;
 using System.ComponentModel.DataAnnotations;
 
