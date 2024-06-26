@@ -25,8 +25,12 @@ builder.Services.AddScoped<IPostListService, PostListService>();
 // Cookie 驗證
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
 {
-    //未登入時會自動導到這個網址
+    // 未登入時會自動導到這個網址
     option.LoginPath = new PathString("/api/Login/NoLogin");
+    // 沒權限時會自動導到這個網址
+    option.AccessDeniedPath = new PathString("/api/Login/NoAccess");
+    // 全部的 API 登入時間設定
+    // option.ExpireTimeSpan = TimeSpan.FromSeconds(2);
 });
 
 // 全域加上權限

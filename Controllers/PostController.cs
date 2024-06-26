@@ -73,6 +73,8 @@ namespace Post.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "admin")]
+
         public async Task<IActionResult> Delete([FromRoute] Guid id)
         {
             var result = await _postListService.DeletePost(id);

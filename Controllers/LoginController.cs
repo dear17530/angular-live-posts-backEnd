@@ -40,12 +40,20 @@ namespace Post.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, user.Account),
-                    new Claim("FullName", user.Name)
+                    new Claim("FullName", user.Name),
+                    new Claim(ClaimTypes.Role, user.Role)
                 };
 
+                // 也有其他屬性可以設定
+                //var authProperties = new AuthenticationProperties
+                //{
+                //    ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(2)
+                //};
 
+                // AddSeconds 只有這隻 API 受影響
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
 
                 return Ok("登入成功");
             }
@@ -63,6 +71,12 @@ namespace Post.Controllers
         public string noLogin()
         {
             return "未登入";
+        }
+
+        [HttpGet("NoAccess")]
+        public string noAccess()
+        {
+            return "沒有權限";
         }
     }
 }

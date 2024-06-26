@@ -12,4 +12,6 @@ public partial class Employee
     public string Account { get; set; }
 
     public string Password { get; set; }
+
+    public string Role { get; set; }
 }

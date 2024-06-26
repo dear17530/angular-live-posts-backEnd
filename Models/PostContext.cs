@@ -30,6 +30,7 @@ public partial class PostContext : DbContext
             entity.Property(e => e.Id).HasDefaultValueSql("(newid())");
             entity.Property(e => e.Name).IsRequired();
             entity.Property(e => e.Password).IsRequired();
+            entity.Property(e => e.Role).IsRequired();
         });
 
         modelBuilder.Entity<PostList>(entity =>
