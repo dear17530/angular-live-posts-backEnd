@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Post.Dtos.Post;
 using Post.Models;
 using Post.Parameters;
+using System.Security.Claims;
 
 namespace Post.Services
 {
@@ -50,7 +51,7 @@ namespace Post.Services
         public async Task<PostList> CreatePost(PostReqDto value)
         {
             var Claims = _httpContextAccessor.HttpContext.User.Claims.ToList();
-            var EmployeeId = Claims.Where(a => a.Type == "Id").First().Value;
+            var EmployeeId = Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).First().Value;
 
             var map = _mapper.Map<PostList>(value);
             map.DatetimeCreated = DateTime.Now;

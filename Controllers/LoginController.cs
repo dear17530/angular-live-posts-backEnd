@@ -44,9 +44,10 @@ namespace Post.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()), // Claims.Where(a => a.Type == ClaimTypes.NameIdentifier).First().Value;
                     new Claim(JwtRegisteredClaimNames.Sub, user.Name),
-                    new Claim(ClaimTypes.Role, user.Role)
+                    new Claim(ClaimTypes.Role, user.Role),
+                    new Claim("NameId", user.Id.ToString()) // Claims.Where(a => a.Type == "NameId").First().Value;
                 };
 
                 // 產出 JWT Token
