@@ -23,15 +23,15 @@ namespace Post.Filters
 
                 if (tokenFlag)
                 {
-                    if(outValue != "123") // 如果驗證不通過
-                    {
-                        context.Result = new JsonResult(new ResultViewModel()
-                        {
-                            Data = "test1",
-                            HttpCode = 401,
-                            Message = "沒有登入"
-                        });
-                    }
+                    //if(outValue != "123") // 如果驗證不通過
+                    //{
+                    //    context.Result = new JsonResult(new ResultViewModel()
+                    //    {
+                    //        Data = "test1",
+                    //        HttpCode = 401,
+                    //        Message = "沒有登入"
+                    //    });
+                    //}
                 }
                 else // 如果 Headers 沒有傳入 Authorization
                 {

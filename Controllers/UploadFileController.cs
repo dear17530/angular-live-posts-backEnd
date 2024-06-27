@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Post.Filters;
 using Post.Models;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -8,8 +9,7 @@ namespace Post.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-
-
+    [FileLimitFilter(Size=5)]
     public class UploadFileController : ControllerBase
     {
         private readonly IWebHostEnvironment _env;
