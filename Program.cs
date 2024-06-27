@@ -41,6 +41,9 @@ builder.Services.AddMvc(options =>
     options.Filters.Add(new AuthorizeFilter());
 });
 
+// 在自訂元件取值 需要另外注入
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

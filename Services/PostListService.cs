@@ -8,12 +8,14 @@ namespace Post.Services
 {
     public class PostListService : IPostListService
     {
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly PostContext _postContext;
         private readonly IMapper _mapper;
-        public PostListService(PostContext postContext, IMapper mapper)
+        public PostListService(PostContext postContext, IMapper mapper, IHttpContextAccessor httpContextAccessor)
         {
             _postContext = postContext;
             _mapper = mapper;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IEnumerable<PostResDto>> QueryPost(PostResParamater value)
@@ -47,8 +49,12 @@ namespace Post.Services
 
         public async Task<PostList> CreatePost(PostReqDto value)
         {
+            var Claims = _httpContextAccessor.HttpContext.User.Claims.ToList();
+            var EmployeeId = Claims.Where(a => a.Type == "Id").First().Value;
+
             var map = _mapper.Map<PostList>(value);
             map.DatetimeCreated = DateTime.Now;
+            map.Author = EmployeeId;
 
             _postContext.PostLists.Add(map);
             await _postContext.SaveChangesAsync();

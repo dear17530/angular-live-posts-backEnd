@@ -5,7 +5,6 @@ namespace Post.Dtos.Post
     [StartTimeEndTime]
     public class PostResDto
     {
-        [PostTitle]
         public string Title { get; set; }
         public string Description { get; set; }
         public string ImagePath { get; set; }

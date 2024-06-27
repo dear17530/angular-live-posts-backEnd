@@ -41,6 +41,7 @@ namespace Post.Controllers
                 {
                     new Claim(ClaimTypes.Name, user.Account),
                     new Claim("FullName", user.Name),
+                    new Claim("Id", user.Id.ToString()),
                     new Claim(ClaimTypes.Role, user.Role)
                 };
 
