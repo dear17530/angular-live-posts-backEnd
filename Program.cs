@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Post.Filters;
 using Post.Models;
 using Post.Services;
 using System.Text;
@@ -56,7 +57,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 // 2. 用 swagger 測試會有 cors 問題
 builder.Services.AddMvc(options =>
 {
-    options.Filters.Add(new AuthorizeFilter());
+    //options.Filters.Add(new AuthorizeFilter());
+    options.Filters.Add(new AuthorizationFilter());
 });
 
 // 在自訂元件取值 需要另外注入
