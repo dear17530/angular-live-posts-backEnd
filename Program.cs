@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Post.Models;
 using Post.Services;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,15 +26,30 @@ builder.Services.AddAutoMapper(typeof(Program));
 builder.Services.AddScoped<IPostListService, PostListService>();
 
 // Cookie 驗證
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(option =>
+//{
+//    // 未登入時會自動導到這個網址
+//    option.LoginPath = new PathString("/api/Login/NoLogin");
+//    // 沒權限時會自動導到這個網址
+//    option.AccessDeniedPath = new PathString("/api/Login/NoAccess");
+//    // 全部的 API 登入時間設定
+//    // option.ExpireTimeSpan = TimeSpan.FromSeconds(2);
+//});
+
+// JwtBearerDefaults 需安裝套件
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    // 未登入時會自動導到這個網址
-    option.LoginPath = new PathString("/api/Login/NoLogin");
-    // 沒權限時會自動導到這個網址
-    option.AccessDeniedPath = new PathString("/api/Login/NoAccess");
-    // 全部的 API 登入時間設定
-    // option.ExpireTimeSpan = TimeSpan.FromSeconds(2);
-});
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true, // 是否驗證 Issuer
+        ValidIssuer = builder.Configuration["Jwt:Issuer"], // 設定 Issuer 的值
+        ValidateAudience = true, // 是否驗證 Audience
+        ValidAudience = builder.Configuration["Jwt:Audience"], // 設定 Audience 的值
+        ValidateLifetime = true, // 是否驗證到期時間(預設為 true)
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:KEY"])) // 私鑰設定
+    };
+}
+);
 
 // 全域加上權限
 // 1. 無須驗證的 api 可以加上 [AllowAnonymous]

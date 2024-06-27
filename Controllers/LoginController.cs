@@ -5,9 +5,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Post.Dtos.Login;
 using Post.Models;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using System.Text;
 
 namespace Post.Controllers
 {
@@ -17,11 +20,13 @@ namespace Post.Controllers
     public class LoginController : ControllerBase
     {
         private readonly PostContext _postContext;
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
 
-        public LoginController(PostContext postContext, IMapper mapper)
+        public LoginController(PostContext postContext, IConfiguration configuration, IMapper mapper)
         {
             _postContext = postContext;
+            _configuration = configuration;
             _mapper = mapper;
         }
 
@@ -39,24 +44,26 @@ namespace Post.Controllers
             {
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimTypes.Name, user.Account),
-                    new Claim("FullName", user.Name),
-                    new Claim("Id", user.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.NameId, user.Id.ToString()),
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Name),
                     new Claim(ClaimTypes.Role, user.Role)
                 };
 
-                // 也有其他屬性可以設定
-                //var authProperties = new AuthenticationProperties
-                //{
-                //    ExpiresUtc = DateTimeOffset.UtcNow.AddSeconds(2)
-                //};
+                // 產出 JWT Token
+                // _configuration: 取得 appsettings.json 內的值
+                var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:KEY"]));
 
-                // AddSeconds 只有這隻 API 受影響
-                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                //await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity), authProperties);
+                var jwt = new JwtSecurityToken(
+                    issuer: _configuration["JWT:Issuer"], // 發行者
+                    audience: _configuration["JWT:Audience"], // 給誰使用
+                    claims: claims, // 資訊
+                    expires: DateTime.Now.AddMinutes(30), // 期限
+                    signingCredentials: new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256) // 產生方式
+                );
 
-                return Ok("登入成功");
+                var token = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+                return Ok(token);
             }
         }
 
