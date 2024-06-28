@@ -59,6 +59,7 @@ builder.Services.AddMvc(options =>
 {
     //options.Filters.Add(new AuthorizeFilter());
     options.Filters.Add(new AuthorizationFilter());
+    options.Filters.Add(typeof(ActionFilter)); // 因為有引入 .env 需要建構子 才這樣引入
 });
 
 // 在自訂元件取值 需要另外注入
